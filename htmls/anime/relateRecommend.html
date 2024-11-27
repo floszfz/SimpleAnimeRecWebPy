@@ -1,0 +1,31 @@
+<div class="my-3 content-title">
+    <div>
+        <h5 class="mb-0">
+            <i class="bi-arrow-right-square"></i>
+            &nbsp;相关推荐
+        </h5>
+    </div>
+</div>
+<div class="row">
+    {% if relateRecommendAnimes %}
+        {% for anime in relateRecommendAnimes %}
+            <div class="col" style="flex: 0 0 20%; max-width: 20%;">
+                <div class="card mb-4 card-item">
+                    <a href="/anime/detail?animeid={{ anime.id }}"
+                       title="{{ anime.animename }}">
+                        <img src="{{ anime.pic.url }}"
+                             alt="{{ anime.animename }}" class="card-img-top">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">
+                            <a href="/anime/detail?animeid={{ anime.id }}"
+                               title="{{ anime.animename }}" class="text-primary">{{ anime.animename }}</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12" align="center">暂无数据！</div>
+    {% endif %}
+</div>

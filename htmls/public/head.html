@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg" style="border-width: 0; padding: 1rem 0;">
+    <div class="col-4">
+        <a href="/" class="navbar-brand mr-auto mr-lg-0"
+           title="动漫推荐系统"
+           style="padding-top: 0; padding-bottom: 0; font-size: 1.6rem">动漫推荐系统</a>
+    </div>
+    <div class="navbar-collapse offcanvas-collapse"
+         id="navbarsExampleDefault">
+        <form class="col-7 form-inline my-2 my-lg-0"
+              action="/anime/lists" method="post" id="searchForm">
+            {% csrf_token %}
+            <input type="hidden" name="typeid" id="typeid">
+            <input class="form-control mr-sm-2" type="text" placeholder="请输入动漫名称"
+                   name="animename" value="{{ animename }}" maxlength="100"
+                   style="width: 75%">
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit"
+                    style="line-height: 1.6">搜索
+            </button>
+        </form>
+        <ul class="col-5 navbar-nav mr-auto"
+            style="justify-content: center;">
+            {% if not request.session.session_user %}
+                <li class="nav-item">
+                    <a class="btn" href="/login">用户登录</a>
+                </li>
+                <li class="nav-item btn">
+                    &nbsp;&nbsp;/&nbsp;&nbsp;
+                </li>
+                <li class="nav-item">
+                    <a class="btn" href="/register">用户注册</a>
+                </li>
+            {% else %}
+                <li class="nav-item dropdown">
+                    <a class="btn btn-sm dropdown-toggle" href="#"
+                       data-toggle="dropdown" aria-expanded="false"
+                       style="font-size: 1rem; text-transform: none;">
+                        欢迎：
+                        {% if request.session.session_user.uname|length > 10 %}
+                            {{ request.session.session_user.uname|slice:'10' }}...
+                        {% else %} {{ request.session.session_user.uname }} {% endif %}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/user/detail">个人中心</a>
+                        <a class="dropdown-item" href="/user/update">信息维护</a>
+                        <a class="dropdown-item" href="/user/updatePassword">密码安全</a>
+                        <a class="dropdown-item" href="/rate/lists">评分记录</a>
+                        <a class="dropdown-item" href="javascript:doLogout()">退出登录</a>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

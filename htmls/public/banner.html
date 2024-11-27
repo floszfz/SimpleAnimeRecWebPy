@@ -1,0 +1,68 @@
+<div class="d-flex align-items-center p-2 rounded shadow-sm"
+     style="background-color: #faf9f1; border: 1px solid #ccc;">
+    <ul id="banner" class="nav nav-pills banner">
+        <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0)"
+               style="padding-right: 0">动漫类型：</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/anime/lists">全部类型</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               style="padding-left: 0; padding-right: 0; color: #ccc; font-size: 0.5rem"
+               href="javascript:void(0)">|</a>
+        </li>
+        {% for type in types %}
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="javascript:submitSearchForm({{ type.id }})"
+                   data-info="{{ type.id }}">{{ type.typename }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   style="padding-left: 0; padding-right: 0; color: #ccc; font-size: 0.5rem"
+                   href="javascript:void(0)">|</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<script>
+    //动漫类型点击函数
+    function submitSearchForm(typeid) {
+        $("#typeid").val(typeid);
+        $("#searchForm").submit();
+    }
+
+    $(function () {
+        //动漫类型选中样式
+        //选中的动漫类型
+        var currentTypeid = "{{ typeid }}";
+        //如果选中的动漫类型不为空
+        if (currentTypeid != null && currentTypeid != "") {
+            //清空所有选中的样式
+            $("#banner").find("a").removeClass("active");
+            //设置选中动漫类型样式
+            $("#banner").find("a").each(function () {
+                if (currentTypeid == $(this).attr("data-info")) {
+                    $(this).addClass("active");
+                    return false;
+                }
+            });
+        } else {
+            //未选中动漫类型
+            //判断当前网页地址是否是动漫列表页面
+            //获取当前页面的url
+            var currentUrl = window.location.pathname;
+            $("#banner").find("a").each(function () {
+                if ($(this).attr("href") == currentUrl) {
+                    //清空所有选中的样式
+                    $("#banner").find("a").removeClass("active");
+                    //设置选中动漫类型样式
+                    $(this).addClass("active");
+                    return false;
+                }
+            });
+        }
+    });
+</script>

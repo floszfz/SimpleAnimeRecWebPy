@@ -1,0 +1,64 @@
+<div>
+    <ul class="pagination justify-content-center pt-3"
+        style="font-size: 14px;">
+        {% if pageBean %}
+            <li class="page-item" style="margin-left: 10px">
+                <a class="page-link" href="javascript:toPageNum(1)" title="首页">
+                    <span aria-hidden="true">首页</span>
+                </a>
+            </li>
+            {% if pageBean.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" title="上一页"
+                       href="javascript:toPageNum({{ pageBean.previous_page_number }})">
+                        <span aria-hidden="true">上一页</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for currentPageParam in showPageRange %}
+                <li class="page-item {% if currentPageParam == pageBean.number %}active{% endif %}">
+                    <a class="page-link"
+                       href="javascript:toPageNum({{ currentPageParam }})">{{ currentPageParam }}</a>
+                </li>
+            {% endfor %}
+            {% if pageBean.has_next %}
+                <li class="page-item">
+                    <a class="page-link" title="下一页"
+                       href="javascript:toPageNum({{ pageBean.next_page_number }})">
+                        <span aria-hidden="true">下一页</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link" title="尾页"
+                   href="javascript:toPageNum({{ pageBean.paginator.num_pages }})">
+                    <span aria-hidden="true">尾页</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    <ul class="pagination justify-content-center pb-3"
+        style="font-size: 14px;">
+        {% if pageBean %}
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0)"
+                   style="border: 0">
+                    共
+                    {{ pageBean.paginator.count }}
+                    条数据
+                    {{ pageBean.paginator.num_pages }}
+                    页
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+<script>
+    // 页面跳转
+    function toPageNum(page) {
+        // 修改请求页码
+        $("#page").val(page);
+        // 提交分页表单
+        $("#form").submit();
+    }
+</script>

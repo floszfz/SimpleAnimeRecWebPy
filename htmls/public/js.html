@@ -1,0 +1,34 @@
+{% load static %}
+<script src="{% static 'javascript/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'javascript/bootstrap.min.js' %}"></script>
+<script src="{% static 'javascript/layer/layer.js' %}"></script>
+<script src="{% static 'javascript/js_ajax.js' %}"></script>
+<script>
+    var baseUrl = "/"; //项目请求地址前缀
+    var baseUploadUrl = "{{ MEDIA_URL }}"; //项目文件上传请求地址前缀
+
+    // 退出登录
+    function doLogout() {
+        layer.confirm('确定退出登录？', {
+            btn: ['确定', '取消'],
+            icon: 9,
+            title: '提示'
+        }, function () {
+            // 退出登录
+            location.href = baseUrl + "logout";
+        }, function () {
+
+        });
+    }
+
+    //判断用户是否登录，获取登录用户的session会话信息，如果有会话信息，即用户已登录
+    var isLogin = "{{ request.session.session_user|default:'' }}";
+
+    //登录提示
+    function doIsLogin() {
+        if (isLogin == "") {
+            layer.msg("请先登录！");
+        }
+        return isLogin;
+    }
+</script>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body>
+<div class="container">
+    {% include 'public/head.html' %}
+    {% include 'public/banner.html' %}
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;个人中心
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        {% include 'public/menu.html' %}
+        <div class="col-9">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <form action="" method="post" id="form">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户名：</label>
+                                    <div class="col-sm-7 col-form-label">
+                                        {{ user.uname }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户头像：</label>
+                                    <div class="col-sm-7 col-form-label">
+                                        <img src="{{ user.headpic.url }}" alt="{{ user.uname }}" id="headpic_image"
+                                             style="width: 100px; display: block;">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户姓名：</label>
+                                    <div class="col-sm-7 col-form-label">
+                                        {{ user.fullname }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户电话：</label>
+                                    <div class="col-sm-7 col-form-label">{{ user.phone }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户邮箱：</label>
+                                    <div class="col-sm-7 col-form-label">{{ user.mailbox }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户性别：</label>
+                                    <div class="col-sm-7 col-form-label">
+                                        {{ user.get_gender_display }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户年龄：</label>
+                                    <div class="col-sm-7 col-form-label">{{ user.age }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">个人简介：</label>
+                                    <div class="col-sm-10 col-form-label">
+                                        {{ user.introduction }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">注册时间：</label>
+                                    <div class="col-sm-7 col-form-label">{{ user.addtime }}</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'public/foot.html' %}
+</div>
+</body>
+</html>

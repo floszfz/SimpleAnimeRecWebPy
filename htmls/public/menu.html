@@ -1,0 +1,37 @@
+<div class="col-3">
+    <div class="list-group" id="menu">
+        <a href="/user/detail"
+           class="list-group-item list-group-item-action">个人中心</a>
+        <a href="/user/update"
+           class="list-group-item list-group-item-action">信息维护</a>
+        <a href="/user/updatePassword"
+           class="list-group-item list-group-item-action">密码安全</a>
+        <a href="/rate/lists"
+           class="list-group-item list-group-item-action">评分记录</a>
+        <a href="javascript:doLogout()"
+           class="list-group-item list-group-item-action">退出登录</a>
+    </div>
+</div>
+<script>
+    // 菜单选中js
+    $(function () {
+        // 获取当前页面的url
+        var currentUrl = window.location.pathname;
+        //获取当前页面自定义url，有些页面需要定义这个变量
+        if (typeof (resetUrl) != "undefined" && resetUrl != null) {
+            currentUrl = resetUrl;
+        }
+        // 通过当前页面的url与菜单中的url对比实现菜单选中
+        $("#menu").find("a").each(function () {
+            if ($(this).attr("href") == currentUrl) {
+                // 删除默认菜单选中样式
+                $("#menu").find("a").each(function () {
+                    $(this).removeClass("active");
+                });
+                // 添加菜单选中样式
+                $(this).addClass("active");
+                return;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,151 @@
+<!-- 继承默认的列表页面 -->
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% block content_title %}
+    <!-- 引入jquery.js组件 -->
+    <script src="{% static 'javascript/jquery-3.5.1.min.js' %}"></script>
+    <!-- 引入echarts可视化js组件 -->
+    <script src="{% static 'javascript/echarts.min.js' %}"></script>
+{% endblock %}
+{% block result_list %}
+    <div style="width: 100%; padding: 20px 0; text-align: center;">
+        <div id="main1" style="width: 100%; height: 400px;"></div>
+        <div id="main2" style="width: 100%; height: 400px; margin-top: 20px; margin-bottom: 40px"></div>
+    </div>
+    <script>
+        //饼状图，数据分析：用户性别统计
+        var usergenderJsonArray = {{ usergenderList|safe }};
+        //格式转换
+        if (usergenderJsonArray != "" && usergenderJsonArray != null && usergenderJsonArray.length > 0) {
+            for (var i = 0; i < usergenderJsonArray.length; i++) {
+                var data = {};
+                var gender = usergenderJsonArray[i]["user_gender"];//性别
+                data.name = gender == 1 ? "男" : (gender == 2 ? "女" : "其他");
+                data.value = usergenderJsonArray[i]["usercount"];//数量
+                usergenderJsonArray[i] = data;
+            }
+        }
+        //设置echarts饼状图
+        var dom1 = document.getElementById('main1');
+        var myChart1 = echarts.init(dom1, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+        var option1 = {
+            title: {
+                text: '数据分析：用户性别统计',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: '用户数量',
+                    type: 'pie',
+                    radius: '55%',
+                    data: usergenderJsonArray,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        if (option1 && typeof option1 === 'object') {
+            if (usergenderJsonArray != "" && usergenderJsonArray != null && usergenderJsonArray.length > 0) {
+                myChart1.setOption(option1);
+            } else {
+                $("#main1").css("height", "auto");
+                $("#main1").html("<span style='color:black;display:block;text-align:center'>暂无用户数据！</span>");
+            }
+        }
+        window.addEventListener('resize', myChart1.resize);
+    </script>
+    <script>
+        //柱状图，数据分析：动漫类型的平均评分
+        var animetypeJsonArray = {{ animetypeList|safe }};
+        //X轴
+        var animetypeJsonArrayX = new Array();
+        //Y轴
+        var animetypeJsonArrayY = new Array();
+        //格式转换
+        if (animetypeJsonArray != "" && animetypeJsonArray != null && animetypeJsonArray.length > 0) {
+            for (var i = 0; i < animetypeJsonArray.length; i++) {
+                var data = {};
+                data.name = animetypeJsonArray[i]["type_typename"];//动漫类型名称
+                data.value = animetypeJsonArray[i]["avgscore"];//平均评分
+                animetypeJsonArrayX[i] = data.name;
+                animetypeJsonArrayY[i] = data.value;
+            }
+        }
+        //设置echarts柱状图
+        var dom2 = document.getElementById('main2');
+        var myChart2 = echarts.init(dom2, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+        var option2 = {
+            title: {
+                text: '数据分析：动漫类型平均评分',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: animetypeJsonArrayX,
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        margin: 20,
+                        rotate: 0
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '平均评分',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: animetypeJsonArrayY
+                }
+            ]
+        };
+        if (option2 && typeof option2 === 'object') {
+            if (animetypeJsonArray != "" && animetypeJsonArray != null && animetypeJsonArray.length > 0) {
+                myChart2.setOption(option2);
+            } else {
+                $("#main2").css("height", "auto");
+                $("#main2").html("<span style='color:black;display:block;text-align:center'>暂无评分数据！</span>");
+            }
+        }
+        window.addEventListener('resize', myChart2.resize);
+    </script>
+{% endblock %}
+{% block pagination %}{% endblock %}

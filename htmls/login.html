@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body style="background: url({% static 'photo/userLoginl.jpg' %}) repeat;background-size: cover;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-5" style="margin-top: 4%; margin-bottom: 4%;">
+            <div class="card text-center login">
+                <div class="card-header">
+                    <a href="/">动漫推荐系统&nbsp;·&nbsp;用户登录</a>
+                </div>
+                <div class="card-body mt-3">
+                    <form action="doLogin" method="post" id="form" class="px-4">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="text"
+                                       name="uname" value="" maxlength="30" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="password"
+                                       name="password" value="" maxlength="30" placeholder="请输入密码">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label text-right">
+                                <a href="/register">用户注册</a>
+                                &nbsp;&nbsp;/&nbsp;&nbsp;
+                                <a href="/forgetPassword">忘记密码</a>
+                            </label>
+                        </div>
+                        <div class="form-group row justify-content-center mt-2">
+                            <div class="col-12" align="center">
+                                <button type="button" id="submitBtn" class="btn login-btn">登&nbsp;&nbsp;录</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        //登录
+        $("#submitBtn").click(function () {
+            var temp = true;
+            $("#form").find("input").each(
+                function () {
+                    if ($(this).val().trim() == null || $(this).val().trim() == "") {
+                        temp = false;
+                        return false;
+                    }
+                });
+            if (!temp) {
+                layer.msg("请输入登录信息！");
+                return false;
+            }
+            jqueryAjaxFun($("#form").attr("action"), $("#form").serialize());
+        });
+    });
+</script>
+</html>

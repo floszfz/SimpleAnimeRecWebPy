@@ -1,0 +1,94 @@
+/* 前端用户样式文件 */
+.banner .nav-item {
+	margin-right: 5px;
+	margin-bottom: 2px;
+}
+
+.banner .nav-item .nav-link {
+	padding: 0.5rem 0.9rem;
+	color: #91170a;
+	font-size: 0.88rem;
+}
+
+.banner .nav-item .nav-link:hover, .banner .nav-item .nav-link.active {
+	color: #91170a;
+	font-weight: 600;
+	background-color: unset;
+}
+
+.card-item .card-img-top {
+	height: 262px;
+	overflow: hidden;
+}
+
+.card-item .card-body {
+	padding: 0.6rem
+}
+
+.card-item .card-body .card-title {
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.card-item .card-body .card-text {
+	height: 63px;
+	overflow: hidden
+}
+
+.content-title {
+	padding: 0.7rem;
+	border-bottom: 1px solid #dfdbdb;
+}
+
+.content-title h5 {
+	font-size: 1rem;
+	color: #91170a;
+}
+
+.login {
+	border-radius: 20px;
+	overflow: hidden;
+	border: 1px solid #dedede;
+}
+
+.login .card-header {
+	padding: 0 0;
+	background-color: #F5B7BF;
+}
+
+.login .card-header a {
+	font-size: 1.5rem;
+	padding-top: 50px;
+	padding-bottom: 39px;
+	display: block;
+	color: white;
+}
+
+.login .card-header a:hover {
+	color: yellow;
+	text-decoration: unset;
+}
+
+.login .login-input {
+	font-size: 15px;
+	color: #1b3815;
+	line-height: 1.2;
+	width: 100%;
+	height: 55px;
+	border-radius: 27px;
+	padding: 0 35px;
+}
+
+.login .login-btn {
+	padding: 0 20px;
+	width: 100%;
+	height: 50px;
+	background-color: #F5B7BF;
+	border-radius: 25px;
+	font-size: 15px;
+	color: #fff;
+}
+
+.login .login-btn:hover {
+	color: yellow;
+}

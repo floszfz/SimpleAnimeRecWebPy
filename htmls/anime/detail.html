@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>动漫信息|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body>
+<div class="container">
+    {% include 'public/head.html' %}
+    {% include 'public/banner.html' %}
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;动漫信息
+            </h5>
+        </div>
+    </div>
+    <div class="card mb-3" style="border: 0">
+        <div class="row no-gutters">
+            <div class="col-md-2">
+                <img src="{{ anime.pic.url }}"
+                     alt="{{ anime.animename }}" class="card-img">
+            </div>
+            <div class="col-md-9" style="margin-left:5%">
+                <div class="card-body">
+                    <h5 class="card-title">{{ anime.animename }}</h5>
+                    <p class="card-text">动漫类型： {{ anime.typeid.typename }}</p>
+                    <p class="card-text">添加时间：{{ anime.addtime }}</p>
+                    <p class="card-text">综合评分：{{ avgscore|default_if_none:0.0 }}分</p>
+                    <p class="card-text">评分数量：{{ scorecount }}</p>
+                    我的评分：
+                    <div id="star" style="display: inline-block"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;动漫简介
+            </h5>
+        </div>
+    </div>
+    <div class="text-break">{{ anime.introduction }}</div>
+    {% include 'anime/relateRecommend.html' %}
+    {% include 'public/foot.html' %}
+</div>
+</body>
+<script src="{% static 'javascript/jquery.raty.min.js' %}"></script>
+<script>
+    //当前动漫id
+    var animeid = "{{ anime.id }}";
+
+    //评分
+    $('#star').raty(
+        {
+            score: parseFloat("{{ rate.score|default_if_none:0.0 }}"),
+            readOnly: false,
+            path: baseUrl + 'static/photo',
+            hints: ['1分', '2分', '3分', '4分', '5分'],
+            click: function (score, evt) {
+                var data = "animeid=" + animeid + "&score=" + score + "&csrfmiddlewaretoken={{ csrf_token }}";
+                if (doIsLogin()) {
+                    jqueryAjaxFun("rate/doSaveOrUpdate", data);
+                }
+            }
+        }
+    );
+</script>
+</html>

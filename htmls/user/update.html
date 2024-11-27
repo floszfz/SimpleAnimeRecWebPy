@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>信息维护|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body>
+<div class="container">
+    {% include 'public/head.html' %}
+    {% include 'public/banner.html' %}
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;信息维护
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        {% include 'public/menu.html' %}
+        <div class="col-9">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <form action="user/doUpdate" method="post" id="form">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户名：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" name="uname"
+                                               maxlength="30" value="{{ user.uname }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户头像：</label>
+                                    <div class="col-sm-7">
+                                        {% if user and user.headpic %}
+                                            <img src="{{ user.headpic.url }}"
+                                                 alt="{{ user.uname }}" id="headpic_image"
+                                                 style="width: 100px; display: block; margin-bottom: 5px">
+                                        {% else %}
+                                            <img src="" id="headpic_image"
+                                                 style="width: 100px; display: none; margin-bottom: 5px">
+                                        {% endif %}
+                                        <input type="file" id="headpic_file"
+                                               accept="image/jpg,image/jpeg,image/png,image/bmp"
+                                               style="display: block;">
+                                        <input type="hidden" id="headpic" name="headpic"
+                                               value="{{ user.headpic }}" style="display: block;">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户姓名：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" name="fullname"
+                                               maxlength="30" value="{{ user.fullname }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户电话：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="phone"
+                                               name="phone" maxlength="11"
+                                               oninput="value=value.replace(/[^\d]/g,'')"
+                                               value="{{ user.phone }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户邮箱：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="mailbox"
+                                               name="mailbox" maxlength="50" value="{{ user.mailbox }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户性别：</label>
+                                    <div class="col-sm-7">
+                                        <div class="form-check form-check-inline align-bottom">
+                                            <input class="form-check-input" type="radio"
+                                                   id="inlineRadio1" name="gender" value="1"
+                                                   {% if user.gender == 1 %}checked="checked"{% endif %}>
+                                            <label class="form-check-label" for="inlineRadio1">男</label>
+                                        </div>
+                                        <div class="form-check form-check-inline align-bottom">
+                                            <input class="form-check-input" type="radio"
+                                                   id="inlineRadio2" name="gender" value="2"
+                                                   {% if user.gender == 2 %}checked="checked"{% endif %}>
+                                            <label class="form-check-label" for="inlineRadio2">女</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">用户年龄：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="age" name="age"
+                                               maxlength="2" oninput="value=value.replace(/[^\d]/g,'')"
+                                               value="{{ user.age }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">个人简介：</label>
+                                    <div class="col-sm-10">
+											<textarea class="form-control" name="introduction"
+                                                      id="introduction" maxlength="1000"
+                                                      rows="3">{{ user.introduction }}</textarea>
+                                    </div>
+                                </div>
+                            </form>
+                            <a href="javascript:doUpdate()" class="btn btn-primary">提交</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'public/foot.html' %}
+</div>
+</body>
+<script src="{% static 'javascript/js_ajax_upload.js' %}"></script>
+<script>
+    $(function () {
+        //上传头像
+        $("#headpic_file").change(function () {
+            jqueryAjaxUploadImageFun("upload", "headpic",
+                {"csrfmiddlewaretoken": "{{ csrf_token }}"});
+        });
+    });
+
+    //修改信息
+    function doUpdate() {
+        var temp = true;
+        $("#form").find("input[type='text']").each(function () {
+            if ($(this).val().trim() == null || $(this).val().trim() == "") {
+                temp = false;
+                return false;
+            }
+        });
+        //验证头像
+        var headpic = $("#headpic").val();
+        if (headpic == null || headpic == "") {
+            temp = false;
+        }
+        //验证性别
+        if ($("#form").find("input[type='radio']:checked").length == 0) {
+            temp = false;
+        }
+        //个人简介
+        var introduction = $("#introduction").val().trim();
+        if (introduction == null || introduction == "") {
+            temp = false;
+        }
+        if (!temp) {
+            layer.msg("数据不能为空！");
+            return false;
+        }
+        // 设置正则表达式的手机号码格式 规则 ^起点 $终点 1第一位数是必为1  [3-9]第二位数可取3-9的数字  \d{9} 匹配9位数字
+        var phoneReg = /^1[3-9]\d{9}$/;
+        if (!phoneReg.test($("#phone").val())) {
+            layer.msg("电话格式不正确！");
+            return false;
+        }
+        // 对电子邮件的验证
+        var mailboxreg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        if (!mailboxreg.test($("#mailbox").val())) {
+            layer.msg("邮箱格式不正确！");
+            return false;
+        }
+        // 验证年龄：1-99
+        var age = parseInt($("#age").val());
+        if (age < 10 || age > 90) {
+            layer.msg("年龄范围（10-90）不正确！");
+            return false;
+        }
+        jqueryAjaxFun($("#form").attr("action"), $("#form").serialize());
+    }
+</script>
+</html>

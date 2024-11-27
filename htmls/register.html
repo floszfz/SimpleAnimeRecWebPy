@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body style="background: url({% static 'photo/userLoginl.jpg' %}) repeat;background-size: cover;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10" style="margin-top: 4%; margin-bottom: 4%;">
+            <div class="card text-center login">
+                <div class="card-header">
+                    <a href="/">动漫推荐系统&nbsp;·&nbsp;用户注册</a>
+                </div>
+                <div class="card-body mt-3">
+                    <form action="doRegister" method="post" id="form" class="form-inline px-4">
+                        {% csrf_token %}
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="text"
+                                       name="uname" placeholder="请输入用户名" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="text" id="phone"
+                                       name="phone" placeholder="请输入电话" maxlength="11"
+                                       oninput="value=value.replace(/[^\d]/g,'')">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="text"
+                                       id="mailbox" placeholder="请输入邮箱" name="mailbox" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3" style="font-size: 15px">
+                            <label class="col-sm-4 col-form-label">用户性别：</label>
+                            <div class="col-sm-8 text-left">
+                                <div class="form-check form-check-inline d-inline-flex">
+                                    <input class="form-check-input" type="radio" id="inlineRadio1"
+                                           name="gender" value="1">
+                                    <label class="form-check-label" for="inlineRadio1">男</label>
+                                </div>
+                                <div class="form-check form-check-inline d-inline-flex">
+                                    <input class="form-check-input" type="radio" id="inlineRadio2"
+                                           name="gender" value="2">
+                                    <label class="form-check-label" for="inlineRadio2">女</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="text" id="age"
+                                       name="age" placeholder="请输入年龄" maxlength="2"
+                                       oninput="value=value.replace(/[^\d]/g,'')">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="password"
+                                       name="password" placeholder="请输入密码" id="password"
+                                       maxlength="30">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <div class="col-sm-12">
+                                <input class="form-control login-input" type="password"
+                                       id="passwordConf" placeholder="请输入确认密码" name="passwordConf"
+                                       maxlength="30">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group row mb-3">
+                            <label class="col-sm-12 col-form-label">
+                                <a href="/login">用户登录</a>
+                                &nbsp;&nbsp;/&nbsp;&nbsp;
+                                <a href="/forgetPassword">忘记密码</a>
+                            </label>
+                        </div>
+                        <div class="col-12 form-group row justify-content-center mt-2 mb-3">
+                            <div class="col-6" align="center">
+                                <button type="button" id="submitBtn" class="btn login-btn">注&nbsp;&nbsp;册</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        //注册
+        $("#submitBtn").click(function () {
+            var temp = true;
+            $("#form").find("input").each(
+                function () {
+                    if ($(this).val().trim() == null || $(this).val().trim() == "") {
+                        temp = false;
+                        return false;
+                    }
+                });
+            //验证性别
+            if ($("#form").find("input[type='radio']:checked").length == 0) {
+                temp = false;
+            }
+            if (!temp) {
+                layer.msg("请输入注册信息！");
+                return false;
+            }
+            // 设置正则表达式的手机号码格式 规则 ^起点 $终点 1第一位数是必为1  [3-9]第二位数可取3-9的数字  \d{9} 匹配9位数字
+            var phoneReg = /^1[3-9]\d{9}$/;
+            if (!phoneReg.test($("#phone").val())) {
+                layer.msg("电话格式不正确！");
+                return false;
+            }
+            // 对电子邮件的验证
+            var mailboxreg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            if (!mailboxreg.test($("#mailbox").val())) {
+                layer.msg("邮箱格式不正确！");
+                return false;
+            }
+            // 验证年龄：1-99
+            var age = parseInt($("#age").val());
+            if (age < 10 || age > 90) {
+                layer.msg("年龄范围（10-90）不正确！");
+                return false;
+            }
+            if ($("#password").val().trim() != $("#passwordConf").val().trim()) {
+                layer.msg("两次密码不相同！");
+                return false;
+            }
+            jqueryAjaxFun($("#form").attr("action"), $("#form").serialize());
+        });
+    });
+</script>
+</html>

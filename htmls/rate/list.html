@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>评分记录|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body>
+<div class="container">
+    {% include 'public/head.html' %}
+    {% include 'public/banner.html' %}
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;评分记录
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        {% include 'public/menu.html' %}
+        <div class="col-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">动漫名称</th>
+                    <th scope="col">评分值</th>
+                    <th scope="col">评分时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if pageBean %}
+                    {% for rate in pageBean %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td class="text-break">
+                                <a href="/anime/detail?animeid={{ rate.animeid.id }}"
+                                   title="{{ rate.animeid.animename }}">
+                                    {{ rate.animeid.animename }} </a>
+                            </td>
+                            <td>{{ rate.score }}分</td>
+                            <td>{{ rate.addtime }}</td>
+                            <td>
+                                <a href="javascript:doDelete({{ rate.id }})">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" align="center">暂无数据！</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+            <form action="/rate/lists" method="post" id="form">
+                {% csrf_token %}
+                <input type="hidden" name="page" id="page" value="{{ page }}">
+            </form>
+            {% include 'public/pagination.html' %}
+        </div>
+    </div>
+    {% include 'public/foot.html' %}
+</div>
+</body>
+<script>
+    //删除
+    function doDelete(rateid) {
+        layer.confirm("确认删除？", {
+            icon: 9,
+            title: "提示"
+        }, function (index) {
+            jqueryAjaxFun("rate/doDelete", "rateid=" + rateid + "&csrfmiddlewaretoken={{ csrf_token }}");
+        });
+    }
+</script>
+</html>

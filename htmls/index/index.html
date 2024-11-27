@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页|动漫推荐系统</title>
+    {% include 'public/css.html' %}
+    {% include 'public/js.html' %}
+</head>
+<body>
+<div class="container">
+    {% include 'public/head.html' %}
+    {% include 'public/banner.html' %}
+    {% include 'index/recommend.html' %}
+    <div class="my-3 content-title">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi-arrow-right-square"></i>
+                &nbsp;动漫列表
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        {% if pageBean %}
+            {% for anime in pageBean %}
+                <div class="col" style="flex: 0 0 20%; max-width: 20%;">
+                    <div class="card mb-4 card-item">
+                        <a href="/anime/detail?animeid={{ anime.id }}"
+                           title="{{ anime.animename }}">
+                            <img src="{{ anime.pic.url }}"
+                                 alt="{{ anime.animename }}" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">
+                                <a href="/anime/detail?animeid={{ anime.id }}"
+                                   title="{{ anime.animename }}" class="text-primary">{{ anime.animename }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-md-12" align="center">暂无数据！</div>
+        {% endif %}
+    </div>
+    <form action="/anime/lists" method="post" id="form">
+        {% csrf_token %}
+        <input type="hidden" name="page" id="page" value="{{ page }}">
+    </form>
+    {% include 'public/pagination.html' %}
+    {% include 'public/foot.html' %}
+</div>
+</body>
+</html>
