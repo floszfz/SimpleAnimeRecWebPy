@@ -1,7 +1,9 @@
 # SimpleAnimeRecWebPy
 简单在线动漫推荐系统
+
 一、开发工具及技术
 Python3及以上版本，Django3.6及以上版本，mysql8，navicat数据库管理工具或者sqlyog数据库管理工具，bootstrap前端框架，bootstrap字体图标，html页面，javascript脚本，jquery脚本，jquery.raty五角星评分组件，echarts.js可视化图表组件等。
+
 二、项目功能
 前台首页地址：http://127.0.0.1:8000/
 后台首页地址：http://127.0.0.1:8000/admin
